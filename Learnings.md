@@ -82,3 +82,59 @@ export default function PlanetList ({ planets = [] }) {
   )
 }
 ```
+
+### Domains
+Applcation data really belongs in Microcosm. In order to this, we need to make a `Planets domain`. This domain will define all of the operations for data related to planets.
+
+```js
+// src/domains/planets.js
+const Planets = {
+
+  getInitialState() {
+    return [
+      'Mercury', 'Venus', 'Earth', 'Mars',
+      'Jupiter', 'Saturn', 'Uranus', 'Neptune',
+      'Pluto'
+    ]
+  }
+
+}
+
+export default Planets
+```
+
+Instances of Microcosm are called _**repos**_. An isolated warehouse to manage application state. It's fairly easy to connect to the planets domain:
+
+```js
+// src/repo.js
+import Microcosm from 'microcosm'
+
+class Repo extends Microcosm {
+  setup () {
+    this.addDomain('planets', Planets)
+  }
+}
+
+export default Repo
+```
+
+What we're essentially saying here is `Mount the Planets domain to 'planets'`. Everything will be managed under `repo.state.planets` and we can subscribe to that in our Planets presenter, like so:
+
+```js
+class Planets extends Presenter {
+
+  getModel () {
+    return {
+      planets: state => state.planets
+    }
+  }
+
+  render () {
+    const {planets} = this.model
+    return <PlanetList planets={planets}/>
+  }
+}
+
+```
+
+Now it's awesomely nice and separated. When given a function, it will invoke it with the current application state! 

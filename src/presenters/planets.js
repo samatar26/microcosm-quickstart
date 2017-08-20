@@ -6,7 +6,7 @@ class Planets extends Presenter {
 
   getModel () {
     return {
-      planets: () => ['Mercury', 'Venus', 'Eart', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']
+      planets: state => state.planets
     }
   }
 

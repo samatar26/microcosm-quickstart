@@ -216,3 +216,44 @@ class Planets extends Presenter {
 export default Planets
 
 ```
+
+## Handling user interaction
+Microcosm provides a couple of options for capturing user input and passing it into actions on such option is using the `ActionButton` add-on. This lets us modify our View layer to pull that in:
+
+```js
+import React from 'react'
+import ActionButton from 'microcosm/addons/action-button'
+import {addPlanet} from '../actions/planets'
+
+export default function PlanetList ({ planets = [] }) {
+  return (
+    <div>
+      <ul>
+        {planets.map((planet) => <li key={planet}>{planet}</li>)}
+      </ul>
+
+      <ActionButton action={addPlanet} value="Alpha Centauri">
+        Add Planet
+      </ActionButton>
+    </div>
+  )
+}
+```
+
+When the button is clicked, it will broadcast the `addPlanet` action. It won't do anything as we hav to create the action and subscribe our domain to it:
+```js
+// src/actions/planets.js
+export function addPlanet(planet) {
+  return planet
+}
+
+//src/domains/planets.js
+register () {
+  return {
+    [getPlanets]: this.append,
+    [addPlanet]: this.append
+  }
+}
+```
+
+Now we have a button in our view which triggers an action that adds a new planet to our data model. When the domain updates the state with the new planet, our _presenter_ and _view_ will update accordingly to display the new data!

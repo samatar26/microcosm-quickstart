@@ -1,4 +1,4 @@
-import {getPlanets} from '../actions/planets'
+import {getPlanets, addPlanet} from '../actions/planets'
 
 const Planets = {
   getInitialState () {
@@ -11,7 +11,8 @@ const Planets = {
 
   register () {
     return {
-      [getPlanets]: this.append
+      [getPlanets]: this.append,
+      [addPlanet]: this.append
     }
   }
 }

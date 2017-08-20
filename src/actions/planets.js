@@ -9,3 +9,7 @@ export function getPlanets() {
   })
 
 }
+
+export function addPlanet(planet) {
+  return planet
+}

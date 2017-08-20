@@ -1,17 +1,9 @@
 import React from 'react'
 
-export default function PlanetList () {
+export default function PlanetList ({ planets = [] }) {
   return (
     <ul>
-     <li>Mercury</li>
-     <li>Venus</li>
-     <li>Earth</li>
-     <li>Mars</li>
-     <li>Jupiter</li>
-     <li>Saturn</li>
-     <li>Uranus</li>
-     <li>Neptune</li>
-     <li>Pluto</li>
+      {planets.map((planet) => <li key={planet}>{planet}</li>)}
     </ul>
   )
 }

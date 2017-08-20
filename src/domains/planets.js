@@ -1,13 +1,19 @@
+import {getPlanets} from '../actions/planets'
+
 const Planets = {
-
   getInitialState () {
-    return [
-      'Mercury', 'Venus', 'Earth', 'Mars',
-      'Jupiter', 'Saturn', 'Uranus', 'Neptune',
-      'Pluto'
-    ]
-  }
+    return []
+  },
 
+  append (planets, data) {
+    return planets.concat(data)
+  },
+
+  register () {
+    return {
+      [getPlanets]: this.append
+    }
+  }
 }
 
 export default Planets

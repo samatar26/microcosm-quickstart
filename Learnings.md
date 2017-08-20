@@ -137,4 +137,82 @@ class Planets extends Presenter {
 
 ```
 
-Now it's awesomely nice and separated. When given a function, it will invoke it with the current application state! 
+Now it's awesomely nice and separated. When given a function, it will invoke it with the current application state!
+
+## Defining an action
+
+If we were working with let's say a planets API, the `Planets domain` wouldn't know about all of the planets right on start-up, because we have to fetch information from a server. Microcosm actions are responsible for dealing with asynchronous state. We'll move the data inside of planets out into an action, like so:
+
+```js
+export function getPlanets() {
+
+  return new Promise((resolve, reject) => {
+    resolve([
+      'Mercury', 'Venus', 'Earth', 'Mars',
+      'Jupiter', 'Saturn', 'Uranus', 'Neptune',
+      'Pluto'
+    ])
+  })
+
+}
+```
+
+Then the key thing is to _**subscribe**_ to the action using the `register()` function inside the planets domain:
+
+```js
+import {getPlanets} from '../actions/planets'
+
+const Planets = {
+  getInitialState () {
+    return []
+  },
+
+  append (planets, data) {
+    //planets is the initial state we return from `getInitialState`
+    // Data is what we get returned from out action
+    return planets.concat(data)
+  },
+
+  register () {
+    return {
+      // Curious? This works because Microcosm assigns a unique
+      // toString() method to each action pushed into it. That means
+      // the action can be used as a unique key in an object.
+      [getPlanets]: this.append
+    }
+  }
+}
+
+export default Planets
+```
+
+We still have to use the  Presenter’s `setup lifecycle hook` to fetch the planets when the presenter boots up. When the `Planets presenter` is about the mounted to the page, it will call `setup`. This will cause a `getPlanets` to get queued up with the application's repo. Micrcosm will process the action, sending updates to the domains who indicated that they wanted to get updates based on `the register function`.
+
+```js
+
+import React from 'react'
+import Presenter from 'microcosm/addons/presenter'
+import PlanetList from '../views/planet-list'
+import {getPlanets} from '../actions/planets'
+
+class Planets extends Presenter {
+
+  setup (repo) {
+    repo.push(getPlanets)
+  }
+
+  getModel () {
+    return {
+      planets: state => state.planets
+    }
+  }
+
+  render () {
+    const {planets} = this.model
+    return <PlanetList planets={planets}/>
+  }
+}
+
+export default Planets
+
+```

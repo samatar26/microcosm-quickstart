@@ -1,11 +1,9 @@
 import React from 'react'
 
-export default function Layout ({children}) {
-
+export default function Layout () {
   return (
     <div>
       <h1>Solar System</h1>
-      {children}
     </div>
   )
 }

@@ -1,11 +1,14 @@
 import React from 'react'
-import {Route, IndexRoute} from 'react-router'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 
 import App from './presenters/application'
 import Planets from './presenters/planets'
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRoute component={Planets}/>
-  </Route>
+  <Router>
+    <div>
+      <Route path="/" component={App}/>
+      <Route path="/" component={Planets}/>
+    </div>
+  </Router>
 )
